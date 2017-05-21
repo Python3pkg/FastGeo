@@ -1,5 +1,5 @@
 import socket, struct, re, sys, os, csv
-from parsers import DbParser
+from .parsers import DbParser
 from bintrees import FastAVLTree
 
 
@@ -45,7 +45,7 @@ class MaxMindGeoLiteCSVParser(DbParser):
 		"""
 		Creates a GeoNode from a line of the parsed CSV file.
 		"""
-		return GeoNode(long(line[self.fields["long_lower"]]), long(line[self.fields["long_upper"]]))
+		return GeoNode(int(line[self.fields["long_lower"]]), int(line[self.fields["long_upper"]]))
 
 	def create_value(self, line):
 		"""
@@ -70,7 +70,7 @@ class GeoNode(object):
 		if isinstance(upper, str):
 			upper = self.__class__.ip2long(upper)
 
-		if not isinstance(lower, long) or not isinstance(upper, long):
+		if not isinstance(lower, int) or not isinstance(upper, int):
 			raise ValueError("Invalid IP longs")
 
 		self.lower = lower
@@ -103,7 +103,7 @@ class GeoNode(object):
 
 			if isinstance(other, str):
 				ip = GeoNode.ip2long(other)
-			elif not isinstance(other, long):
+			elif not isinstance(other, int):
 				raise ValueError("Cannot compare IP address: %s(%s)" % (other.__class__.__name__, str(other)))
 
 			if ip < self.lower:
@@ -155,13 +155,13 @@ class MaxMindGeoLiteASNCSVParser(DbParser):
 		"""
 		Creates a GeoNode from a line of the parsed CSV file.
 		"""
-		return GeoNode(long(line[self.fields["long_lower"]]), long(line[self.fields["long_upper"]]))
+		return GeoNode(int(line[self.fields["long_lower"]]), int(line[self.fields["long_upper"]]))
 
 	def create_value(self, line):
 		"""
 		Creates an ASNValue from a line of the parsed CSV file.
 		"""
-		return ASNValue(long(line[self.fields["long_lower"]]), long(line[self.fields["long_upper"]]), line[self.fields["asn_corp"]])
+		return ASNValue(int(line[self.fields["long_lower"]]), int(line[self.fields["long_upper"]]), line[self.fields["asn_corp"]])
 
 
 class ASNValue(object):
